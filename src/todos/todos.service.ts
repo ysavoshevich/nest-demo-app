@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from 'src/interfaces/todo.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateTodoDto } from 'src/todos/dto/create-todo.dto';
+// import { Todo } from 'src/interfaces/todo.interface';
+import { Todo, TodoDocument } from './schemas/todo.schema';
 
 @Injectable()
 export class TodosService {
-  private readonly todos: Todo[] = [];
+  constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>) {}
 
-  create(todo: Todo) {
-    this.todos.push(todo);
+  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
+    try {
+      const createdTodo = new this.todoModel(createTodoDto);
+      console.log(createdTodo);
+      return await createdTodo.save();
+    } catch (error) {}
   }
 
-  findAll(): Todo[] {
-    return this.todos;
+  async findAll(): Promise<Todo[]> {
+    const todos = await this.todoModel.find().exec();
+    console.log(todos);
+    return todos;
   }
 }
