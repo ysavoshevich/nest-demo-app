@@ -8,8 +8,8 @@ import { TodosModule } from './todos/todos.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGO_URI),
     TodosModule,
+    MongooseModule.forRoot(process.env.MONGO_URI),
   ],
   // controllers: [AppController],
   // providers: [AppService],
