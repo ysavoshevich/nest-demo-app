@@ -19,11 +19,13 @@ export class AuthService {
   }
 
   async register(userDto: UserDto) {
+    // TODO: add password encryption
     const createdUser = await this.usersService.create(userDto);
   }
 
   async validateUser(userDto: UserDto) {
     const user = await this.usersService.findOne(userDto.username);
+    // TODO: add password encryption
     if (user && user.password === userDto.password) {
       const { password, ...result } = user;
       return result;
