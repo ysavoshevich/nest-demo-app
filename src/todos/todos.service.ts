@@ -8,15 +8,14 @@ import { Todo, TodoDocument } from './schemas/todo.schema';
 export class TodosService {
   constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>) {}
 
-  async createTodo(createTodoDto: CreateTodoDto): Promise<Todo> {
+  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     try {
       const createdTodo = new this.todoModel(createTodoDto);
-      console.log(createdTodo);
       return await createdTodo.save();
     } catch (error) {}
   }
 
-  async findAllTodos(): Promise<Todo[]> {
+  async findAll(): Promise<Todo[]> {
     const todos = await this.todoModel.find().exec();
     return todos.map((todo) => ({
       id: todo.id,
@@ -25,11 +24,11 @@ export class TodosService {
     }));
   }
 
-  async removeTodo(todoId: string) {
+  async remove(todoId: string) {
     await this.todoModel.deleteOne({ _id: todoId }).exec();
   }
 
-  async updateTodo(todoId: string, createTodoDto: CreateTodoDto) {
+  async update(todoId: string, createTodoDto: CreateTodoDto) {
     await this.todoModel.findByIdAndUpdate(
       { _id: todoId },
       { ...createTodoDto },
